@@ -320,5 +320,3 @@ sudo systemctl restart ollama
 ---
 
 **⭐ Если понравилось - поставьте звезду!** 🌟
-
-📧 Вопросы: [your-email@example.com](mailto:your-email@example.com)
