@@ -1,168 +1,307 @@
-# 🚀 Swarm Agents - AI Agent Swarm Framework
+# 🤖 Swarm Agents - AI Agent Swarm Framework
 
 [![Python](https://img.shields.io/badge/Python-3.13+-blue.svg)](https://python.org)
-[![Node.js](https://img.shields.io/badge/Node.js-24.12+-green.svg)](https://nodejs.org)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-> **🤖 Мульти-агентная система для совместной работы AI над сложными задачами**
+> **🚀 Мульти-агентная система на базе Roo Code + Ollama для локальной разработки**
 
-## ✨ Возможности
+## 🎯 Концепция
 
-- 🎭 **5 специализированных агентов**: Supervisor, Architect, Coder, Tester, Researcher
-- 🧠 **Единая память роя**: `.swarm_memory/` для совместной работы
-- 🔄 **Протокол передачи задач**: Логированная передача между агентами
-- 🛠️ **MCP интеграция**: Model Context Protocol серверы
-- 📝 **Авто-документация**: Самодокументирующаяся система
-- 🎯 **Ролевая модель**: Четкое разделение обязанностей
+**Swarm Agents** - это фреймворк для создания роев AI-агентов, работающих на **локальных моделях Ollama** через расширение **Roo Code**. Система позволяет нескольким специализированным агентам совместно решать сложные задачи с единым контекстом и координацией.
+
+## 🏗️ Архитектура
+
+### 🧠 Технологический стек
+
+| Компонент | Технология | Назначение |
+|-----------|------------|------------|
+| **IDE** | **Roo Code** | Расширение для VS Code с поддержкой агентов |
+| **LLM** | **Ollama Models** | Локальные модели (llama3, mistral, codellama) |
+| **Координация** | **Handoff Protocol** | Передача контекста между агентами |
+| **Память** | **Markdown Files** | Единая база знаний роя |
+| **Интеграция** | **MCP Servers** | Model Context Protocol для инструментов |
+
+### 🔄 Архитектурные паттерны
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    ROO CODE IDE                             │
+├─────────────────────────────────────────────────────────────┤
+│  👑 Supervisor  🏗️ Architect  💻 Coder  🧪 Tester  🔍 Researcher  │
+└─────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────┐
+│                    🧠 SHARED MEMORY                         │
+│  ┌─────────────────┬─────────────────┬─────────────────┐    │
+│  │ active_state.md │ handoff_log.md  │ architecture.md │    │
+│  └─────────────────┴─────────────────┴─────────────────┘    │
+└─────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────┐
+│                  🦙 OLLAMA LLM SERVER                        │
+│  ┌─────────────────┬─────────────────┬─────────────────┐    │
+│  │    llama3       │    mistral      │   codellama     │    │
+│  └─────────────────┴─────────────────┴─────────────────┘    │
+└─────────────────────────────────────────────────────────────┘
+```
+
+## 🎭 Агенты роя
+
+### 👑 **Supervisor** - Менеджер проекта
+- **Роль**: Распределение задач и контроль качества
+- **Навыки**: Проектный менеджмент, декомпозиция задач
+- **Модель**: `llama3:instruct` (лучше всего подходит для планирования)
+
+### 🏗️ **Architect** - Системный архитектор  
+- **Роль**: Проектирование архитектуры и выбор технологий
+- **Навыки**: System design, паттерны проектирования
+- **Модель**: `mistral:instruct` (хорошо анализирует сложные системы)
+
+### 💻 **Coder** - Разработчик
+- **Роль**: Написание кода и реализация функционала
+- **Навыки**: Программирование, рефакторинг, отладка
+- **Модель**: `codellama:instruct` (специализированная для кода)
+
+### 🧪 **Tester** - QA инженер
+- **Роль**: Тестирование и поиск багов
+- **Навыки**: Unit тесты, интеграционное тестирование
+- **Модель**: `llama3:instruct` (детальный анализ)
+
+### 🔍 **Researcher** - Исследователь
+- **Роль**: Поиск информации и анализ технологий
+- **Навыки**: Research, анализ данных, документация
+- **Модель**: `mistral:instruct` (хорошо с большими объемами текста)
 
 ## 🚀 Быстрый старт
 
 ### 📋 Требования
-- Python 3.13+
-- Node.js 24.12+
-- Windsurf IDE или Roo Code
+- **Python 3.13+**
+- **Ollama** с установленными моделями
+- **Roo Code** расширение для VS Code
 
-### ⚡ Установка
+### ⚡ Установка Ollama
 
 ```bash
-# 1. Клонирование
+# Установка Ollama
+curl -fsSL https://ollama.com/install.sh | sh
+
+# Загрузка моделей
+ollama pull llama3:instruct
+ollama pull mistral:instruct  
+ollama pull codellama:instruct
+
+# Проверка
+ollama list
+```
+
+### 🔧 Настройка Roo Code
+
+1. **Установите Roo Code** из маркетплейса VS Code
+2. **Настройте Ollama** в настройках Roo Code:
+```json
+{
+  "rooCode.modelProvider": "ollama",
+  "rooCode.ollamaBaseUrl": "http://localhost:11434",
+  "rooCode.defaultModel": "llama3:instruct"
+}
+```
+
+3. **Создайте профили агентов** в Roo Code:
+```json
+{
+  "profiles": {
+    "supervisor": {
+      "model": "llama3:instruct",
+      "systemPrompt": "Ты - Supervisor. Ты управляешь роем агентов..."
+    },
+    "architect": {
+      "model": "mistral:instruct", 
+      "systemPrompt": "Ты - Architect. Ты проектируешь системы..."
+    },
+    "coder": {
+      "model": "codellama:instruct",
+      "systemPrompt": "Ты - Coder. Ты пишешь код..."
+    }
+  }
+}
+```
+
+### 🎯 Развертывание роя
+
+```bash
+# Клонирование и запуск
 git clone https://github.com/yourusername/swarm-agents.git
 cd swarm-agents
-
-# 2. Развертывание
-python swarm_deploy.py
-
-# 3. Зависимости
-pip install -r requirements.txt
-
-# 4. Настройка
-cp .env.example .env
-# Добавьте API ключи в .env
-
-# 5. Перезапустите IDE
-```
-
-## 🎭 Как работает рой
-
-### 🎯 Инициализация
-Откройте проект в Windsurf/Roo Code, выберите **Supervisor** и напишите:
-```
-Supervisor, инициализируй проект. Прочитай active_state.md и скажи, что делать.
-```
-
-### 👥 Агенты роя
-
-| Агент | Роль | 🎯 Задачи |
-|-------|------|-----------|
-| 👑 **Supervisor** | 🧠 Менеджер | Распределение задач, контроль |
-| 🏗️ **Architect** | 📐 Архитектор | Проектирование, технологии |
-| 💻 **Coder** | ⌨️ Разработчик | Написание кода |
-| 🧪 **Tester** | 🔍 Тестировщик | Поиск багов, тесты |
-| 📚 **Researcher** | 🔬 Исследователь | Поиск информации |
-
-### 🔄 Цикл работы
-```
-📥 READ Context → 🧠 THINK (Sequential) → ⚡ ACT → 📝 UPDATE Log
-```
-
-## 📁 Структура проекта
-
-```
-swarm-agents/
-├── 📁 src/                    # Основной код
-├── 📁 tests/                   # Тесты
-├── 📁 docs/                    # Документация
-├── 📁 tools/                   # 🛠️ Инструменты агентов
-├── 📁 .swarm_memory/           # 🧠 Мозг роя
-│   ├── 📄 active_state.md      # Текущее состояние
-│   ├── 📄 handoff_log.md       # Лог передачи задач
-│   ├── 📄 architecture.md      # Архитектурные решения
-│   └── 📄 specifications.md   # Технические задания
-├── 📁 .roo/                    # Конфигурация Roo Code
-├── 📄 swarm_deploy.py          # 🚀 Скрипт развертывания
-├── 📄 swarm_cleanup.py         # 🧹 Скрипт очистки
-├── 📄 AGENTS_ROLES.md          # 📖 Роли агентов
-└── 📄 README.md               # 📚 Документация
-```
-
-## 🛠️ Скрипты
-
-### 🚀 Развертывание
-```bash
 python swarm_deploy.py
 ```
-Создает полную инфраструктуру роя с MCP серверами
 
-### 🧹 Очистка
-```bash
-python swarm_cleanup.py          # С подтверждением
-python swarm_cleanup.py --force   # Без подтверждения
+## 🔄 Протокол работы
+
+### 📥 **Фаза 1: Инициализация**
 ```
-Полностью удаляет все следы роя из проекта
-
-## 📖 Пример использования
-
-### 🌐 Создание веб-приложения
+User → Supervisor: "Создай CRUD приложение для задач"
+Supervisor → .swarm_memory/active_state.md: "Проанализирован запрос..."
 ```
-👤 User: Supervisor, создай Flask приложение с CRUD для задач
 
-🤖 Supervisor: [Planning] [Next Agent]: Architect
-🏗️ Architect: Проектирую архитектуру Flask...
-🤖 Supervisor: [Delegating] [Next Agent]: Coder  
-💻 Coder: Реализую Flask приложение...
-🤖 Supervisor: [Reviewing] [Next Agent]: Tester
-🧪 Tester: Пишу тесты и проверяю...
-🤖 Supervisor: [Complete] Приложение готово! 🎉
+### 🧠 **Фаза 2: Планирование** 
+```
+Supervisor → Architect: "Спроектируй архитектуру Flask CRUD"
+Architect → .swarm_memory/architecture.md: "Архитектура: MVC паттерн..."
+```
+
+### ⚡ **Фаза 3: Реализация**
+```
+Supervisor → Coder: "Реализуй Flask приложение по спецификации"
+Coder → .swarm_memory/handoff_log.md: "Созданы models.py, routes.py..."
+```
+
+### 🔍 **Фаза 4: Тестирование**
+```
+Supervisor → Tester: "Протестируй CRUD функциональность"
+Tester → .swarm_memory/qa_checklist.md: "Тесты пройдены, найдены баги..."
+```
+
+## 🛠️ Продвинутые техники
+
+### 🧠 **Sequential Thinking**
+Используйте MCP сервер `sequentialthinking` для сложных задач:
+```python
+# Интеграция с Ollama через MCP
+{
+  "mcpServers": {
+    "sequentialthinking": {
+      "command": "node",
+      "args": ["./tools/mcp-servers/src/sequentialthinking/dist/index.js"]
+    }
+  }
+}
+```
+
+### 📊 **Оптимизация моделей**
+- **llama3:instruct** - для планирования и менеджмента
+- **mistral:instruct** - для архитектуры и исследований  
+- **codellama:instruct** - для программирования
+- **qwen:coder** - альтернатива для кода
+
+### 🔄 **Handshake Protocol**
+```markdown
+## 🤝 HANDOFF LOG
+**[Supervisor] → [Coder]:** Реализуй Flask CRUD по спецификации
+**[Coder] → [Tester]:** Функционал готов в app.py, нужно тестирование
+**[Tester] → [Supervisor]:** Найден баг в delete endpoint, исправьте
+```
+
+## 📖 Примеры использования
+
+### 🌐 **Веб-приложение**
+```
+👤 User: Supervisor, создай блог на Django с авторизацией
+
+🤖 Supervisor: [Planning] → Architect
+🏗️ Architect: Спроектирую Django с JWT аутентификацией...
+🤖 Supervisor: [Delegating] → Coder
+💻 Coder: Создаю models.py, views.py, serializers.py...
+🤖 Supervisor: [Reviewing] → Tester  
+🧪 Tester: Пишу тесты для API endpoints...
+🎉 Result: Готовое Django приложение!
+```
+
+### 📱 **Мобильное приложение**
+```
+👤 User: Supervisor, сделай React Native todo app
+
+🤖 Supervisor: [Planning] → Architect
+🏗️ Architect: Sproektiruyu React Native + Redux...
+🤖 Supervisor: [Delegating] → Coder
+💻 Coder: Sozdavayu components, screens, store...
+🤖 Supervisor: [Reviewing] → Tester
+🧪 Tester: Testiruyu na iOS i Android...
+🎉 Result: Rabochee mobile app!
 ```
 
 ## ⚙️ Конфигурация
 
-### 🔑 Переменные окружения (.env)
-```env
-# API ключи
-OPENAI_API_KEY=sk-your-openai-key
-TAVILY_API_KEY=tvly-your-tavily-key
-ANTHROPIC_API_KEY=your-anthropic-key
+### 🦙 **Ollama модели**
+```bash
+# Рекомендуемые модели
+ollama pull llama3:instruct      # 8B параметров, универсальная
+ollama pull mistral:instruct     # 7B параметров, быстрая  
+ollama pull codellama:instruct    # 7B параметров, для кода
+ollama pull qwen:coder           # 7B параметров, альтернатива
+
+# Для продвинутых пользователей
+ollama pull llama3:70b-instruct  # 70B параметров, максимальное качество
 ```
 
-### 🛠️ MCP Серверы
-Конфигурация в `.roo/mcp.json`:
-- **filesystem**: Работа с файлами
-- **memory**: Управление памятью  
-- **sequentialthinking**: Последовательное мышление
-
-## 🧪 Тестирование
-```bash
-# Базовые тесты
-python -m pytest tests/ -v
-
-# С покрытием
-python -m pytest tests/ --cov=src
+### 🔧 **Roo Code настройки**
+```json
+{
+  "rooCode": {
+    "modelProvider": "ollama",
+    "ollamaBaseUrl": "http://localhost:11434",
+    "temperature": 0.7,
+    "maxTokens": 4096,
+    "contextWindow": 8192
+  }
+}
 ```
 
 ## 🐛 Troubleshooting
 
-**❌ MCP серверы не запускаются?**
-- Установите Node.js
-- Перезапустите IDE
-
-**❌ Агенты не видят память роя?**
-- Проверьте `.swarm_memory/` папку
-- Перезапустите IDE
-
-**❌ Ошибка развертывания?**
+**❌ Ollama не отвечает?**
 ```bash
-python swarm_cleanup.py --force
-python swarm_deploy.py
+# Проверка статуса
+ollama ps
+ollama serve
+
+# Перезапуск
+sudo systemctl restart ollama
 ```
 
+**❌ Roo Code не видит Ollama?**
+- Проверьте настройки в VS Code
+- Убедитесь что `http://localhost:11434` доступен
+- Перезапустите VS Code
+
+**❌ Модель работает медленно?**
+- Используйте более маленькие модели (7B вместо 70B)
+- Увеличьте RAM на сервере Ollama
+- Используйте GPU ускорение
+
+## 🎯 Лучшие практики
+
+### 🏗️ **Архитектурные решения**
+- **MVC паттерн** для веб-приложений
+- **Microservices** для сложных систем  
+- **Clean Architecture** для enterprise проектов
+- **Serverless** для простых сервисов
+
+### 🛠️ **Технологический выбор**
+- **Python/Django** для сложных веб-систем
+- **React/Next.js** для фронтенда
+- **PostgreSQL** для реляционных данных
+- **MongoDB** для гибких структур
+- **Docker** для контейнеризации
+
+### 📊 **Производительность**
+- **Кэширование** с Redis
+- **Асинхронность** с asyncio
+- **Оптимизация запросов** к БД
+- **CDN** для статики
+
 ## 📄 Лицензия
+
 [MIT License](LICENSE)
 
 ## 🙏 Благодарности
-- Model Context Protocol (MCP) 
-- Windsurf IDE
-- Open-source сообществу
+
+- **Ollama** за локальные LLM модели
+- **Roo Code** за расширение VS Code
+- **Meta AI** за Llama 3
+- **Mistral AI** за Mistral модели
+- **Open-source сообществу**
 
 ---
 
