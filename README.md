@@ -137,6 +137,20 @@ cd swarm-agents
 python swarm_deploy.py
 ```
 
+**❌ Ошибка развертывания?**
+```bash
+# Если что-то пошло не так, можно запустить очистку и развернуть заново
+python swarm_cleanup.py --force
+python swarm_deploy.py
+```
+
+### 🧹 Очистка проекта
+После развертывания роя создается скрипт `swarm_cleanup.py` для полного удаления всех следов агентового роя:
+```bash
+python swarm_cleanup.py          # С подтверждением
+python swarm_cleanup.py --force   # Без подтверждения
+```
+
 ## 🔄 Протокол работы
 
 ### 📥 **Фаза 1: Инициализация**
