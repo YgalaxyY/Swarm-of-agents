@@ -1,13 +1,13 @@
-# 🤖 Swarm Agents - AI Agent Swarm Framework
+# Swarm of Agents — эксперимент с конфигурацией ролей
 
 [![Python](https://img.shields.io/badge/Python-3.13+-blue.svg)](https://python.org)
-[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+![License](https://img.shields.io/badge/License-MIT-yellow.svg)
 
 > **🚀 Мульти-агентная система на базе Roo Code + Ollama для локальной разработки**
 
 ## 🎯 Концепция
 
-**Swarm Agents** - это фреймворк для создания роев AI-агентов, работающих на **локальных моделях Ollama** через расширение **Roo Code**. Система позволяет нескольким специализированным агентам совместно решать сложные задачи с единым контекстом и координацией.
+**Swarm of Agents** — личный эксперимент, созданный с помощью AI-инструментов: скрипт подготовки настроек и ролевых промптов для Roo Code и локальных моделей Ollama. В этом репозитории не реализован самостоятельный движок оркестрации агентов. Описанные ниже роли и схема взаимодействия отражают задумку конфигурации; качество автономной работы не измерено.
 
 ## 🏗️ Архитектура
 
@@ -307,7 +307,7 @@ sudo systemctl restart ollama
 
 ## 📄 Лицензия
 
-[MIT License](LICENSE)
+MIT License
 
 ## 🙏 Благодарности
 
