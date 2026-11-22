@@ -1,9 +1,7 @@
 # Swarm of Agents
 
-A configuration experiment for role-based coding workflows using the Roo Code extension and local models through Ollama.
+Эксперимент с настройкой рабочих ролей для Roo Code и локальных моделей через Ollama. В [swarm_deploy.py](swarm_deploy.py) описана генерация промптов и файлов конфигурации для планирования, реализации и проверки.
 
-[swarm_deploy.py](swarm_deploy.py) contains the generator for the role prompts and workspace files. The roles describe work such as planning, implementation and review. Roo Code and the selected local model handle inference and interaction.
+Общение с моделями выполняют Roo Code и выбранный движок. Перед пробным запуском проверьте пути и список файлов, которые записывает генератор. Совместимость с актуальными версиями среды не проверялась.
 
-The project is a snapshot of an earlier local setup. Review the paths and file-writing behavior in the generator before running it in a disposable workspace. Compatibility with current Roo Code and Ollama versions has not been verified.
-
-**Upstream tools** · [Roo Code](https://github.com/RooCodeInc/Roo-Code) · [Ollama](https://github.com/ollama/ollama).
+[Документация Roo Code](https://github.com/RooCodeInc/Roo-Code) · [Ollama](https://github.com/ollama/ollama) · [English](README.en.md).
